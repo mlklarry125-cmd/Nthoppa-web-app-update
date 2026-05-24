@@ -455,7 +455,7 @@ export default function LandingPage() {
             <div>
               <div className="font-body font-semibold text-white/60 text-xs uppercase tracking-widest mb-4">Contact</div>
               <div className="font-body text-white/40 text-sm mb-2">info@nthoppa.com</div>
-              <div className="font-body text-white/40 text-sm mb-2">+267 7123 4567</div>
+              <div className="font-body text-white/40 text-sm mb-2">+267 75 736 600</div>
               <div className="font-body text-white/40 text-sm">Gaborone, Botswana</div>
             </div>
           </div>
