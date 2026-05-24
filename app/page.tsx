@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   Shield, 
   Users, 
@@ -87,17 +87,25 @@ const reviews = [
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
-  const { scrollYProgress } = useScroll();
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(total > 0 ? window.scrollY / total : 0);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <div className="min-h-screen bg-white">
       <Navbar scrolled={scrolled} />
+
+      {/* Optional: Scroll progress bar - uncomment if desired */}
+      {/* <div className="fixed top-0 left-0 right-0 h-1 bg-[#FF6B35] z-50" style={{ width: `${scrollProgress * 100}%` }} /> */}
 
       <main>
         {/* Hero Section */}

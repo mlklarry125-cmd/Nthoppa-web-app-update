@@ -51,12 +51,7 @@
   }
   
   html, body {
-    @apply h-full w-full m-0 p-0;
-    overflow-x: hidden;
     scroll-behavior: smooth;
-    scrollbar-gutter: stable;
-    -webkit-user-select: none;
-    user-select: none;
   }
   
   body {
@@ -65,10 +60,15 @@
     min-height: 100vh;
   }
   
-  /* Re-enable text selection for inputs and content that needs it */
-  input, textarea, [contenteditable] {
-    -webkit-user-select: text;
-    user-select: text;
+  /* Only prevent text selection on specific elements that shouldn't be selectable */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  input, textarea, select, [contenteditable], a, button {
+    -webkit-user-select: auto;
+    user-select: auto;
   }
   
   /* Custom scrollbar - wider for better accessibility */
