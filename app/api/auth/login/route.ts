@@ -7,6 +7,7 @@ const DEMO_CREDENTIALS: Record<string, { email: string; password: string; name: 
   admin:    { email: 'admin@nthoppa.com',    password: 'admin123',    name: 'System Administrator', id: 'admin-001', role: 'admin' },
   agent:    { email: 'agent@nthoppa.com',    password: 'agent123',    name: 'John Motsumi',          id: 'agent-001', role: 'agent', extra: { territory: 'Gaborone Central' } },
   user:     { email: 'client@nthoppa.com',   password: 'client123',   name: 'Josephine Morolong',    id: 'client-001', role: 'client' },
+  client:   { email: 'client@nthoppa.com',   password: 'client123',   name: 'Josephine Morolong',    id: 'client-001', role: 'client' },
   hr:       { email: 'hr@nthoppa.com',       password: 'hr123',       name: 'Thabo Molefe',          id: 'hr-001', role: 'hr' },
   merchant: { email: 'merchant@nthoppa.com', password: 'merchant123', name: 'Kgabo General Store',   id: 'merchant-001', role: 'merchant' },
 };
@@ -15,6 +16,7 @@ const REDIRECT_MAP: Record<string, string> = {
   admin:    '/admin/dashboard',
   agent:    '/dashboard/main',
   user:     '/client/dashboard',
+  client:   '/client/dashboard',
   hr:       '/hr/dashboard',
   merchant: '/merchant/dashboard',
 };
@@ -22,6 +24,7 @@ const REDIRECT_MAP: Record<string, string> = {
 // Map frontend role names to database role values
 const roleMap: Record<string, string> = {
   user: 'client',
+  client: 'client',
   agent: 'agent',
   admin: 'admin',
   hr: 'hr',
@@ -100,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user has the requested role (or if role is 'user' and user role is 'client')
     const userRole = user.role || 'client';
-    const requestedRole = role === 'user' ? 'client' : role;
+    const requestedRole = role === 'user' ? 'client' : role === 'client' ? 'client' : role;
     
     if (userRole !== requestedRole && userRole !== role) {
       console.log('❌ Role mismatch - User role:', userRole, 'Requested:', role);
@@ -115,7 +118,7 @@ export async function POST(request: NextRequest) {
     };
 
     const token = signToken(tokenPayload, '7d');
-    const redirectPath = role === 'user' ? '/client/dashboard' : REDIRECT_MAP[role] || '/';
+    const redirectPath = REDIRECT_MAP[role] || '/';
 
     const response = NextResponse.json({
       success: true,

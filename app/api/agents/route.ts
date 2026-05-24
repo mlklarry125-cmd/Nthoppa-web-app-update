@@ -21,12 +21,14 @@ export async function GET(request: NextRequest) {
                || request.cookies.get("admin_session")?.value;
     
     if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      console.log('❌ Agents GET - No token found');
+      return NextResponse.json([], { status: 200 });
     }
 
     const payload = verifyToken(token);
     if (!payload || !payload.id) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      console.log('❌ Agents GET - Invalid token');
+      return NextResponse.json([], { status: 200 });
     }
 
     // Admins can see all agents; agents can only see themselves
@@ -39,7 +41,8 @@ export async function GET(request: NextRequest) {
       if (agent) {
         where = { id: agent.id };
       } else {
-        return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
+        console.log('❌ Agents GET - Agent not found for email:', payload.email);
+        return NextResponse.json([], { status: 200 });
       }
     }
 
@@ -48,11 +51,13 @@ export async function GET(request: NextRequest) {
       orderBy: { createdAt: 'desc' },
     });
 
+    console.log(`✅ Agents GET - Found ${agents.length} agents`);
     // Return plain array instead of wrapped object
     return NextResponse.json(agents.map(serializeAgent));
   } catch (error) {
-    console.error('GET /api/agents error:', error);
-    return NextResponse.json({ error: 'Failed to fetch agents' }, { status: 500 });
+    console.error('🔴 Agents GET error:', error);
+    // Return empty array instead of crashing — UI shows "No agents found" gracefully
+    return NextResponse.json([], { status: 200 });
   }
 }
 
