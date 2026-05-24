@@ -343,7 +343,7 @@ export default function MerchantDashboard() {
                 <p className="text-white/80 text-sm">Net Profit</p>
                 <p className="text-3xl font-bold">P{netProfit.toLocaleString()}</p>
               </div>
-              <DollarSign className="h-8 w-8 text-white/80" />
+              <img src="/icons/28.jpeg" alt="Profit" className="h-8 w-8 text-white/80" />
             </div>
           </CardContent>
         </Card>

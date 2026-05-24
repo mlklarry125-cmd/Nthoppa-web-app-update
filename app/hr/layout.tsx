@@ -5,23 +5,9 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  LayoutDashboard,
-  Users,
-  Heart,
-  TrendingUp,
-  FileText,
-  Menu,
-  X,
-  LogOut,
-  ChevronDown,
-  Shield,
-  Lock,
-  Activity,
-  Bell,
-  Settings,
-  UserCircle,
-  Calendar,
-  CreditCard,
+  Menu, X, LogOut, ChevronDown,
+  Shield, Lock, Activity, Bell,
+  Settings, UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -38,15 +24,17 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { CoinsIcon, NthoppaLogoMark } from "@/components/ui/NthoppaIcons";
 
-const navItems = [
-  { name: "Dashboard", href: "/hr/dashboard", icon: LayoutDashboard },
-  { name: "Employees", href: "/hr/employees", icon: Users },
-  { name: "Financial Wellness", href: "/hr/financial-wellness", icon: Heart },
-  { name: "Payroll", href: "/hr/payroll", icon: CreditCard },
-  { name: "Salary Advances", href: "/hr/salary-advances", icon: TrendingUp },
-  { name: "Leave Management", href: "/hr/leave", icon: Calendar },
-  { name: "Reports", href: "/hr/reports", icon: FileText },
-  { name: "Settings", href: "/hr/settings", icon: Settings },
+interface NavItem { name: string; href: string; icon: string; }
+
+const navItems: NavItem[] = [
+  { name: "Dashboard", href: "/hr/dashboard", icon: "/icons/29.jpeg" },
+  { name: "Employees", href: "/hr/employees", icon: "/icons/27.jpeg" },
+  { name: "Financial Wellness", href: "/hr/financial-wellness", icon: "/icons/24.jpeg" },
+  { name: "Payroll", href: "/hr/payroll", icon: "/icons/28.jpeg" },
+  { name: "Salary Advances", href: "/hr/salary-advances", icon: "/icons/22.jpeg" },
+  { name: "Leave Management", href: "/hr/leave", icon: "/icons/19.jpeg" },
+  { name: "Reports", href: "/hr/reports", icon: "/icons/5.jpeg" },
+  { name: "Settings", href: "/hr/settings", icon: "/icons/18.jpeg" },
 ];
 
 export default function HRLayout({ children }: { children: React.ReactNode }) {
@@ -114,7 +102,6 @@ export default function HRLayout({ children }: { children: React.ReactNode }) {
       <nav className="space-y-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
-          const IconComponent = item.icon;
           return (
             <Link
               key={item.name}
@@ -127,7 +114,7 @@ export default function HRLayout({ children }: { children: React.ReactNode }) {
                   : "text-gray-400 hover:bg-white/8 hover:text-white"
               )}
             >
-              <IconComponent className="h-5 w-5 flex-shrink-0" />
+              <img src={item.icon} alt={item.name} className="h-5 w-5 flex-shrink-0 rounded" />
               <span>{item.name}</span>
             </Link>
           );

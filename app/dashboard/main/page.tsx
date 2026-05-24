@@ -54,7 +54,7 @@ import Image from "next/image";
 interface StatCardProps {
   title: string;
   value: number;
-  icon: React.ReactNode;
+  icon: string;
   progress?: number;
   color: string;
 }
@@ -69,7 +69,9 @@ function StatCard({ title, value, icon, progress, color }: StatCardProps) {
       className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm transition-all"
     >
       <div className="flex items-start justify-between mb-4">
-        <div className={`p-3 rounded-xl ${color} shadow-sm`}>{icon}</div>
+        <div className={`p-3 rounded-xl ${color} shadow-sm`}>
+          <img src={icon} alt={title} className="h-5 w-5" />
+        </div>
         <span className="text-3xl font-black text-black stat-animate">{value.toLocaleString()}</span>
       </div>
       <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">{title}</h3>
@@ -86,7 +88,7 @@ function StatCard({ title, value, icon, progress, color }: StatCardProps) {
 interface QuickActionProps {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: string;
   onClick: () => void;
   color: string;
 }
@@ -102,7 +104,7 @@ function QuickAction({ title, description, icon, onClick, color }: QuickActionPr
       className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm cursor-pointer group transition-all"
     >
       <div className={`w-12 h-12 ${color} rounded-2xl flex items-center justify-center mb-4 shadow-sm group-hover:scale-110 transition-transform`}>
-        {icon}
+        <img src={icon} alt={title} className="h-6 w-6" />
       </div>
       <h3 className="font-bold text-black mb-1 text-base">{title}</h3>
       <p className="text-sm text-gray-500 mb-4 leading-relaxed">{description}</p>
@@ -301,8 +303,7 @@ export default function AgentHomePage() {
     <DashboardLayout type="agent">
       <div className="space-y-6">
         {/* Back Navigation - Goes to Landing Page */}
-        <button
-          onClick={() => router.push("/")}
+        <button          onClick={() => router.push("/")}
           className="inline-flex items-center gap-2 text-gray-500 hover:text-[#FF6B35] font-medium text-sm mb-6 group transition-colors"
         >
           <div className="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#FF6B35]/10 flex items-center justify-center transition-colors">
@@ -324,18 +325,18 @@ export default function AgentHomePage() {
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
               <div className="p-1.5 bg-white/20 rounded-lg">
-                <Award className="h-4 w-4" />
+                <img src="/icons/24.jpeg" alt="Award" className="h-4 w-4" />
               </div>
               <span className="text-sm font-semibold text-white/80">Welcome back!</span>
             </div>
             <h1 className="text-4xl font-black mb-3 tracking-tight">{agentName || "Agent"}</h1>
             <div className="flex flex-wrap gap-3 text-sm mb-4">
               <div className="flex items-center gap-1.5 bg-white/15 rounded-full px-3 py-1">
-                <MapPin className="h-3.5 w-3.5" />
+                <img src="/icons/19.jpeg" alt="Map" className="h-3.5 w-3.5" />
                 <span>{agentTerritory || "Territory"}</span>
               </div>
               <div className="flex items-center gap-1.5 bg-white/15 rounded-full px-3 py-1">
-                <Shield className="h-3.5 w-3.5" />
+                <img src="/icons/2.jpeg" alt="Shield" className="h-3.5 w-3.5" />
                 <span>ID: {agentId}</span>
               </div>
             </div>
@@ -444,25 +445,25 @@ export default function AgentHomePage() {
             <StatCard
               title="Today's Registrations"
               value={todayRegistrations}
-              icon={<UserPlus className="h-5 w-5 text-white" />}
+              icon="/icons/30.jpeg"
               color="bg-[#FF6B35]"
             />
             <StatCard
               title="This Week"
               value={weekRegistrations}
-              icon={<Calendar className="h-5 w-5 text-white" />}
+              icon="/icons/19.jpeg"
               color="bg-black"
             />
             <StatCard
               title="This Month"
               value={monthRegistrations}
-              icon={<TrendingUp className="h-5 w-5 text-white" />}
+              icon="/icons/22.jpeg"
               color="bg-[#FF6B35]"
             />
             <StatCard
               title="Completion Rate"
               value={completionRate}
-              icon={<CheckCircle className="h-5 w-5 text-white" />}
+              icon="/icons/24.jpeg"
               progress={completionRate}
               color="bg-black"
             />
@@ -472,7 +473,7 @@ export default function AgentHomePage() {
         {/* Behavioural Tracking Data Panel */}
         <div>
           <h2 className="text-lg font-black text-black mb-4 flex items-center gap-2 uppercase tracking-wide">
-            <Activity className="h-5 w-5 text-[#FF6B35]" />
+            <img src="/icons/28.jpeg" alt="Activity" className="h-5 w-5" />
             Behavioural Tracking Data
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -533,28 +534,28 @@ export default function AgentHomePage() {
             <QuickAction
               title="Register New User"
               description="Add a new customer to the platform"
-              icon={<UserPlus className="h-6 w-6 text-white" />}
+              icon="/icons/30.jpeg"
               onClick={() => router.push("/dashboard/register")}
               color="bg-[#FF6B35]"
             />
             <QuickAction
               title="View All Users"
               description="Manage and search customer database"
-              icon={<Users className="h-6 w-6 text-white" />}
+              icon="/icons/27.jpeg"
               onClick={() => router.push("/dashboard/users")}
               color="bg-black"
             />
             <QuickAction
               title="View Reports"
               description="Generate performance reports"
-              icon={<FileText className="h-6 w-6 text-white" />}
+              icon="/icons/5.jpeg"
               onClick={() => router.push("/dashboard/reports")}
               color="bg-[#FF6B35]"
             />
             <QuickAction
               title="NthoppaSure"
               description="Insurance products from Westlife Insurance Botswana"
-              icon={<Shield className="h-6 w-6 text-white" />}
+              icon="/icons/2.jpeg"
               onClick={() => router.push("/dashboard/nthoppa-sure")}
               color="bg-purple-600"
             />
@@ -668,7 +669,7 @@ export default function AgentHomePage() {
           <Card className="border-gray-200">
             <CardHeader>
               <CardTitle className="text-black flex items-center gap-2">
-                <Target className="h-5 w-5 text-[#FF6B35]" />
+                <img src="/icons/22.jpeg" alt="Target" className="h-5 w-5" />
                 Monthly Target Progress
               </CardTitle>
               <CardDescription>Your registration target for this month</CardDescription>
@@ -703,7 +704,7 @@ export default function AgentHomePage() {
           <Card className="border-gray-200">
             <CardHeader>
               <CardTitle className="text-black flex items-center gap-2">
-                <Activity className="h-5 w-5 text-[#FF6B35]" />
+                <img src="/icons/28.jpeg" alt="Activity" className="h-5 w-5" />
                 Quick Stats
               </CardTitle>
               <CardDescription>Your performance overview</CardDescription>
@@ -713,7 +714,7 @@ export default function AgentHomePage() {
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-[#FF6B35]/10 rounded-lg flex items-center justify-center">
-                      <UserCheck className="h-4 w-4 text-[#FF6B35]" />
+                      <img src="/icons/27.jpeg" alt="Users" className="h-4 w-4" />
                     </div>
                     <span className="text-sm text-gray-600">Active Customers</span>
                   </div>
@@ -722,7 +723,7 @@ export default function AgentHomePage() {
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-black/10 rounded-lg flex items-center justify-center">
-                      <UserX className="h-4 w-4 text-black" />
+                      <img src="/icons/27.jpeg" alt="Users" className="h-4 w-4" />
                     </div>
                     <span className="text-sm text-gray-600">Pending / Inactive</span>
                   </div>
@@ -731,7 +732,7 @@ export default function AgentHomePage() {
                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-[#FF6B35]/10 rounded-lg flex items-center justify-center">
-                      <CheckCircle className="h-4 w-4 text-[#FF6B35]" />
+                      <img src="/icons/24.jpeg" alt="Check" className="h-4 w-4" />
                     </div>
                     <span className="text-sm text-gray-600">Avg Completion</span>
                   </div>
