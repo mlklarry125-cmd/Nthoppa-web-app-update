@@ -37,6 +37,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email, password and role are required' }, { status: 400 });
     }
 
+    const isProduction = process.env.NODE_ENV === 'production';
+    
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction, // true on Vercel (HTTPS), false on localhost
+      sameSite: 'lax' as const,
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/',
+    };
+
     // First try demo credentials
     const demo = DEMO_CREDENTIALS[role];
     if (demo && email === demo.email && password === demo.password) {
@@ -57,14 +67,6 @@ export async function POST(request: NextRequest) {
         user: tokenPayload, 
         token 
       });
-
-      const cookieOptions = {
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax' as const,
-        maxAge: 60 * 60 * 24 * 7,
-        path: '/',
-      };
 
       response.cookies.set('nthoppa_token', token, cookieOptions);
       response.cookies.set('user_role', demo.role, { ...cookieOptions, httpOnly: false });
@@ -121,14 +123,6 @@ export async function POST(request: NextRequest) {
       user: tokenPayload,
       token,
     });
-
-    const cookieOptions = {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax' as const,
-      maxAge: 60 * 60 * 24 * 7,
-      path: '/',
-    };
 
     response.cookies.set('nthoppa_token', token, cookieOptions);
     response.cookies.set('user_role', userRole, { ...cookieOptions, httpOnly: false });

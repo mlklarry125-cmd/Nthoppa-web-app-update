@@ -5,42 +5,36 @@ export async function POST() {
   try {
     const response = NextResponse.json({ success: true });
 
+    const isProduction = process.env.NODE_ENV === 'production';
+    
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction, // true on Vercel (HTTPS), false on localhost
+      sameSite: 'lax' as const,
+      maxAge: 0,
+      path: '/',
+    };
+
+    const nonHttpCookieOptions = {
+      httpOnly: false,
+      secure: isProduction,
+      sameSite: 'lax' as const,
+      maxAge: 0,
+      path: '/',
+    };
+
     // Clear ALL session cookies that might exist
     // Agent session cookie
-    response.cookies.set('agent_session', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0,
-      path: '/',
-    });
+    response.cookies.set('agent_session', '', cookieOptions);
 
     // Admin session cookie
-    response.cookies.set('admin_session', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0,
-      path: '/',
-    });
+    response.cookies.set('admin_session', '', cookieOptions);
 
     // Main auth token cookie (used by most portals)
-    response.cookies.set('nthoppa_token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0,
-      path: '/',
-    });
+    response.cookies.set('nthoppa_token', '', cookieOptions);
 
     // User role cookie (used for role-based redirects)
-    response.cookies.set('user_role', '', {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0,
-      path: '/',
-    });
+    response.cookies.set('user_role', '', nonHttpCookieOptions);
 
     console.log('✅ Logout successful - all cookies cleared');
     return response;

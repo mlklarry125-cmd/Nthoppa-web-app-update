@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
 
     if (!token) {
       console.log('❌ Auth check - No token found');
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      const response = NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+      response.headers.set('Cache-Control', 'no-store');
+      return response;
     }
 
     // Use verifyToken from lib/jwt.ts for consistent verification
@@ -29,7 +31,9 @@ export async function GET(request: NextRequest) {
 
     if (!decoded) {
       console.log('❌ Auth check - Token verification failed');
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      const response = NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+      response.headers.set('Cache-Control', 'no-store');
+      return response;
     }
 
     console.log('✅ Auth check - Token verified for:', decoded.email, 'Role:', decoded.role);
@@ -74,7 +78,7 @@ export async function GET(request: NextRequest) {
           role: 'agent',
           territory: agent.territory || decoded.territory || null,
         });
-        res.headers.set('Cache-Control', 'private, max-age=30');
+        res.headers.set('Cache-Control', 'no-store');
         return res;
       }
     }
@@ -82,7 +86,9 @@ export async function GET(request: NextRequest) {
     // Check if user exists and is active
     if (!user || user.status === 'inactive') {
       console.log('❌ Auth check - User not found or inactive:', decoded.email);
-      return NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
+      const response = NextResponse.json({ error: 'User not found or inactive' }, { status: 401 });
+      response.headers.set('Cache-Control', 'no-store');
+      return response;
     }
 
     // Return the real database ID instead of the token's fake ID
@@ -95,13 +101,15 @@ export async function GET(request: NextRequest) {
       territory: decoded.territory || null,
     });
     
-    // Cache the auth result for 30 seconds to reduce database hits
-    res.headers.set('Cache-Control', 'private, max-age=30');
+    // Cache-Control: no-store prevents Vercel CDN from caching the auth check response
+    res.headers.set('Cache-Control', 'no-store');
     
     console.log('✅ Auth check successful for:', decoded.email, 'Real ID:', user.id);
     return res;
   } catch (error) {
     console.error('❌ Auth check error:', error);
-    return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    const response = NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    response.headers.set('Cache-Control', 'no-store');
+    return response;
   }
 }
