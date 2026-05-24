@@ -11,9 +11,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
 import {
-  Search,
-  ChevronRight, DollarSign, Eye,
-  ChevronLeft
+  Users, UserPlus, TrendingUp, Calendar, Activity, Search,
+  ChevronRight, Shield, Lock, Sparkles, DollarSign, Eye, Award,
+  Wallet, BarChart3, ShoppingBag, CreditCard, Zap, Rocket, PieChart, ChevronLeft
 } from "lucide-react";
 import {
   LineChart, Line, Area, AreaChart, XAxis, YAxis, CartesianGrid,
@@ -24,10 +24,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 const statsData = [
-  { title: "Total Users", value: "12,480", change: "+18%", icon: "/icons/27.jpeg", color: "bg-orange-500" },
-  { title: "Active Agents", value: "1,245", change: "+12%", icon: "/icons/30.jpeg", color: "bg-blue-500" },
-  { title: "Today's Registrations", value: "47", change: "+8%", icon: "/icons/19.jpeg", color: "bg-green-500" },
-  { title: "Platform Revenue", value: "BWP 284K", change: "+23%", icon: "/icons/28.jpeg", color: "bg-purple-500" },
+  { title: "Total Users", value: "12,480", change: "+18%", icon: Users, color: "bg-orange-500" },
+  { title: "Active Agents", value: "1,245", change: "+12%", icon: UserPlus, color: "bg-blue-500" },
+  { title: "Today's Registrations", value: "47", change: "+8%", icon: Calendar, color: "bg-green-500" },
+  { title: "Platform Revenue", value: "BWP 284K", change: "+23%", icon: DollarSign, color: "bg-purple-500" },
 ];
 
 const weeklyData = [
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
             >
               <div className="flex items-start justify-between mb-3">
                 <div className={`p-2.5 rounded-xl ${stat.color} bg-opacity-10`}>
-                  <img src={stat.icon} alt={stat.title} className="h-5 w-5" />
+                  <stat.icon className={`h-5 w-5 ${stat.color.replace("bg-", "text-")}`} />
                 </div>
                 <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                   {stat.change}
@@ -353,7 +353,6 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <img src="/icons/2.jpeg" alt="NthoppaSure" className="h-5 w-5" />
                 <h3 className="font-semibold text-white text-base">NthoppaSure</h3>
                 <span className="px-2 py-0.5 bg-[#FF6B35]/20 text-[#FF6B35] text-xs font-semibold rounded-full border border-[#FF6B35]/30">Fintech Marketplace</span>
               </div>

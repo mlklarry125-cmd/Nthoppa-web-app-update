@@ -5,9 +5,25 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Menu, X, LogOut, ChevronDown,
-  Shield, Lock, Activity,
-  Bell, UserCircle, Settings, Award,
+  LayoutDashboard,
+  Users,
+  CreditCard,
+  PiggyBank,
+  BookOpen,
+  History,
+  Menu,
+  X,
+  LogOut,
+  ChevronDown,
+  Shield,
+  Lock,
+  Activity,
+  Rocket,
+  Building2,
+  Bell,
+  UserCircle,
+  Settings,
+  Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -24,18 +40,16 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { CoinsIcon, NthoppaLogoMark } from "@/components/ui/NthoppaIcons";
 
-interface NavItem { name: string; href: string; icon: string; badge?: string; }
-
-const navItems: NavItem[] = [
-  { name: "Dashboard", href: "/client/dashboard", icon: "/icons/29.jpeg" },
-  { name: "My Motshelo", href: "/client/motshelo", icon: "/icons/26.jpeg" },
-  { name: "Loans", href: "/client/loans", icon: "/icons/22.jpeg" },
-  { name: "Savings Goals", href: "/client/savings", icon: "/icons/24.jpeg" },
-  { name: "Education", href: "/client/education", icon: "/icons/25.jpeg" },
-  { name: "Transactions", href: "/client/transactions", icon: "/icons/28.jpeg" },
-  { name: "NthoppaSure", href: "/client/marketplace", icon: "/icons/2.jpeg" },
-  { name: "Banking Pathway", href: "/client/banking", icon: "/icons/20.jpeg" },
-  { name: "Accelerate", href: "/client/accelerate", icon: "/icons/7.jpeg", badge: "New" },
+const navItems = [
+  { name: "Dashboard", href: "/client/dashboard", icon: LayoutDashboard },
+  { name: "My Motshelo", href: "/client/motshelo", icon: Users },
+  { name: "Loans", href: "/client/loans", icon: CreditCard },
+  { name: "Savings Goals", href: "/client/savings", icon: PiggyBank },
+  { name: "Education", href: "/client/education", icon: BookOpen },
+  { name: "Transactions", href: "/client/transactions", icon: History },
+  { name: "NthoppaSure", href: "/client/marketplace", icon: Shield },
+  { name: "Banking Pathway", href: "/client/banking", icon: Building2 },
+  { name: "Accelerate", href: "/client/accelerate", icon: Rocket, badge: "New" },
 ];
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
@@ -103,6 +117,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <nav className="space-y-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
+          const IconComponent = item.icon;
           return (
             <Link
               key={item.name}
@@ -115,7 +130,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                   : "text-gray-400 hover:bg-white/8 hover:text-white"
               )}
             >
-              <img src={item.icon} alt={item.name} className="h-4.5 w-4.5 flex-shrink-0 rounded" />
+              <IconComponent className="h-4.5 w-4.5 flex-shrink-0" />
               <span className="flex-1">{item.name}</span>
               {item.badge && (
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#FF6B35] text-white">

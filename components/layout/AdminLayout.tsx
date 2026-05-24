@@ -5,9 +5,10 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Menu, X, LogOut, Bell, ChevronDown,
-  Shield, Lock, Activity, ChevronRight,
-  Settings, UserCircle,
+  Menu, X, LayoutDashboard, UserPlus, Users, BarChart3,
+  FileText, LogOut, Bell, ChevronDown,
+  Shield, TrendingUp, Activity, ChevronRight, Sparkles, Lock,
+  Building2, Settings, UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -18,19 +19,17 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { CoinsIcon, NthoppaLogoMark } from "@/components/ui/NthoppaIcons";
+import { CoinsIcon, NthoppaLogoMark, SMEIcon, NthoppaSureIcon } from "@/components/ui/NthoppaIcons";
 
-interface NavItem { name: string; href: string; icon: string; }
-
-const adminNavItems: NavItem[] = [
-  { name: "Dashboard", href: "/admin/dashboard", icon: "/icons/29.jpeg" },
-  { name: "Register Agent", href: "/admin/register-agent", icon: "/icons/30.jpeg" },
-  { name: "Manage Agents", href: "/admin/agents", icon: "/icons/27.jpeg" },
-  { name: "Register Merchant", href: "/admin/register-merchant", icon: "/icons/20.jpeg" },
-  { name: "NthoppaSure", href: "/admin/nthoppa-sure", icon: "/icons/2.jpeg" },
-  { name: "SME Pipeline", href: "/admin/sme-pipeline", icon: "/icons/21.jpeg" },
-  { name: "Investor View", href: "/admin/investor", icon: "/icons/22.jpeg" },
-  { name: "Reports", href: "/admin/reports", icon: "/icons/5.jpeg" },
+const adminNavItems = [
+  { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { name: "Register Agent", href: "/admin/register-agent", icon: UserPlus },
+  { name: "Manage Agents", href: "/admin/agents", icon: Users },
+  { name: "Register Merchant", href: "/admin/register-merchant", icon: Building2 },
+  { name: "NthoppaSure", href: "/admin/nthoppa-sure", icon: NthoppaSureIcon },
+  { name: "SME Pipeline", href: "/admin/sme-pipeline", icon: SMEIcon },
+  { name: "Investor View", href: "/admin/investor", icon: TrendingUp },
+  { name: "Reports", href: "/admin/reports", icon: FileText },
 ];
 
 interface AdminLayoutProps {
@@ -195,6 +194,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <nav className="space-y-1">
               {adminNavItems.map((item) => {
                 const isActive = pathname === item.href;
+                const IconComponent = item.icon;
                 return (
                   <Link
                     key={item.name}
@@ -208,7 +208,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     )}
                     title={collapsed ? item.name : undefined}
                   >
-                    <img src={item.icon} alt={item.name} className="h-5 w-5 flex-shrink-0 rounded" />
+                    <IconComponent className="h-5 w-5 flex-shrink-0" />
                     {!collapsed && <span>{item.name}</span>}
                   </Link>
                 );

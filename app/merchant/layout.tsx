@@ -5,9 +5,20 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Menu, X, LogOut, ChevronDown,
-  Shield, Lock, Activity, Bell,
-  Settings, UserCircle,
+  LayoutDashboard,
+  CreditCard,
+  QrCode,
+  BarChart3,
+  Menu,
+  X,
+  LogOut,
+  ChevronDown,
+  Shield,
+  Lock,
+  Activity,
+  Bell,
+  Settings,
+  UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -24,14 +35,12 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { CoinsIcon, NthoppaLogoMark } from "@/components/ui/NthoppaIcons";
 
-interface NavItem { name: string; href: string; icon: string; }
-
-const navItems: NavItem[] = [
-  { name: "Dashboard", href: "/merchant/dashboard", icon: "/icons/29.jpeg" },
-  { name: "Transactions", href: "/merchant/transactions", icon: "/icons/28.jpeg" },
-  { name: "QR Payments", href: "/merchant/qr-payments", icon: "/icons/3.jpeg" },
-  { name: "Analytics", href: "/merchant/analytics", icon: "/icons/22.jpeg" },
-  { name: "Settings", href: "/merchant/settings", icon: "/icons/18.jpeg" },
+const navItems = [
+  { name: "Dashboard", href: "/merchant/dashboard", icon: LayoutDashboard },
+  { name: "Transactions", href: "/merchant/transactions", icon: CreditCard },
+  { name: "QR Payments", href: "/merchant/qr-payments", icon: QrCode },
+  { name: "Analytics", href: "/merchant/analytics", icon: BarChart3 },
+  { name: "Settings", href: "/merchant/settings", icon: Settings },
 ];
 
 export default function MerchantLayout({ children }: { children: React.ReactNode }) {
@@ -99,6 +108,7 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
       <nav className="space-y-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
+          const IconComponent = item.icon;
           return (
             <Link
               key={item.name}
@@ -111,7 +121,7 @@ export default function MerchantLayout({ children }: { children: React.ReactNode
                   : "text-gray-400 hover:bg-white/8 hover:text-white"
               )}
             >
-              <img src={item.icon} alt={item.name} className="h-5 w-5 flex-shrink-0 rounded" />
+              <IconComponent className="h-5 w-5 flex-shrink-0" />
               <span>{item.name}</span>
             </Link>
           );

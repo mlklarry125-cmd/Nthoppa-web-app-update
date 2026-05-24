@@ -148,7 +148,7 @@ export default function HRDashboard() {
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <img src="/icons/28.jpeg" alt="Wallet" className="h-6 w-6 text-white/80" />
+              <Wallet className="h-6 w-6 text-white/80" />
               <h3 className="font-semibold">Company Wallet</h3>
             </div>
             <div className="flex gap-2">
@@ -183,10 +183,10 @@ export default function HRDashboard() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { title: "Total Employees", value: totalEmployees, change: "+12", icon: "/icons/27.jpeg", color: "bg-orange-500" },
-          { title: "Wellness Score", value: "74", change: "+5", icon: "/icons/28.jpeg", color: "bg-green-500", suffix: "%" },
-          { title: "Salary Advances", value: "P1.2M", change: "+18%", icon: "/icons/22.jpeg", color: "bg-blue-500" },
-          { title: "Avg Engagement", value: "82%", change: "+7%", icon: "/icons/24.jpeg", color: "bg-purple-500" },
+          { title: "Total Employees", value: totalEmployees, change: "+12", icon: Users, color: "bg-orange-500" },
+          { title: "Wellness Score", value: "74", change: "+5", icon: Activity, color: "bg-green-500", suffix: "%" },
+          { title: "Salary Advances", value: "P1.2M", change: "+18%", icon: TrendingUp, color: "bg-blue-500" },
+          { title: "Avg Engagement", value: "82%", change: "+7%", icon: Award, color: "bg-purple-500" },
         ].map((stat, idx) => (
           <motion.div
             key={stat.title}
@@ -197,7 +197,7 @@ export default function HRDashboard() {
           >
             <div className="flex items-start justify-between mb-3">
               <div className={`p-2.5 rounded-xl ${stat.color} bg-opacity-10`}>
-                <img src={stat.icon} alt={stat.title} className="h-5 w-5" />
+                <stat.icon className={`h-5 w-5 ${stat.color.replace("bg-", "text-")}`} />
               </div>
               <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                 {stat.change}

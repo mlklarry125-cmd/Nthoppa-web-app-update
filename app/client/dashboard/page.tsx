@@ -195,17 +195,6 @@ export default function ClientDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Back Navigation */}
-      <button
-        onClick={() => router.back()}
-        className="inline-flex items-center gap-2 text-gray-500 hover:text-[#FF6B35] font-medium text-sm mb-2 group transition-colors"
-      >
-        <div className="w-8 h-8 rounded-lg bg-gray-100 group-hover:bg-[#FF6B35]/10 flex items-center justify-center transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-        </div>
-        Back
-      </button>
-
       {/* Rotating Motivational Banner */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -340,17 +329,17 @@ export default function ClientDashboard() {
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { icon: "/icons/24.jpeg", label: "Start Saving", href: "/client/savings" },
-          { icon: "/icons/2.jpeg", label: "Get Insurance", href: "/client/marketplace" },
-          { icon: "/icons/22.jpeg", label: "Apply for Loan", href: "/client/loans" },
-          { icon: "/icons/24.jpeg", label: "Earn Coins", href: "/client/education" },
+          { icon: PiggyBank, label: "Start Saving", href: "/client/savings", color: "#FF6B35" },
+          { icon: Shield, label: "Get Insurance", href: "/client/marketplace", color: "#10b981" },
+          { icon: TrendingUp, label: "Apply for Loan", href: "/client/loans", color: "#8b5cf6" },
+          { icon: Award, label: "Earn Coins", href: "/client/education", color: "#f59e0b" },
         ].map((action) => (
           <button
             key={action.label}
             onClick={() => router.push(action.href)}
             className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
           >
-            <img src={action.icon} alt={action.label} className="h-6 w-6" />
+            <action.icon className="h-6 w-6" style={{ color: action.color }} />
             <span className="text-sm font-medium text-gray-700">{action.label}</span>
           </button>
         ))}
@@ -410,7 +399,8 @@ export default function ClientDashboard() {
                     toast({ title: "Unlinked", description: "You have unlinked from your employer." });
                   }}
                 >
-                  Unlink                </Button>
+                  Unlink
+                </Button>
               </div>
             </div>
           ) : (

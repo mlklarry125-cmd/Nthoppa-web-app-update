@@ -5,8 +5,10 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Menu, X, LogOut, Bell, ChevronDown,
-  Shield, Lock, Activity, ChevronRight,
+  Menu, X, LayoutDashboard, UserPlus, Users, BarChart3, MapPin,
+  MessageSquare, FileText, LogOut, Bell, ChevronDown,
+  User, Trophy, Brain, BookOpen, TrendingUp, CreditCard,
+  ShoppingBag, Store, Shield, Lock, Activity, ChevronRight, Sparkles,
   Settings, UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,28 +21,28 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { getAgentSession, clearAgentSession, getAdminSession, clearAdminSession } from "@/lib/storage";
 import { useToast } from "@/hooks/use-toast";
-import { CoinsIcon, NthoppaLogoMark } from "@/components/ui/NthoppaIcons";
+import { CoinsIcon, NthoppaLogoMark, MotsheloIcon, SMEIcon, NthoppaSureIcon } from "@/components/ui/NthoppaIcons";
 
-interface NavItem { name: string; href: string; icon: string; badge?: string; }
+interface NavItem { name: string; href: string; icon: any; badge?: string; }
 interface Notification { id: string; message: string; type: string; read: boolean; createdAt: string; }
 
 const agentNavItems: NavItem[] = [
-  { name: "Dashboard", href: "/dashboard/main", icon: "/icons/29.jpeg" },
-  { name: "Register User", href: "/dashboard/register", icon: "/icons/30.jpeg" },
-  { name: "Users", href: "/dashboard/users", icon: "/icons/27.jpeg" },
-  { name: "Motshelo", href: "/dashboard/motshelo", icon: "/icons/26.jpeg" },
-  { name: "Education", href: "/dashboard/education", icon: "/icons/25.jpeg" },
-  { name: "AI Advisor", href: "/dashboard/ai-advisor", icon: "/icons/1.jpeg", badge: "AI" },
-  { name: "Rewards", href: "/dashboard/gamification", icon: "/icons/24.jpeg" },
-  { name: "Analytics", href: "/dashboard/analytics", icon: "/icons/28.jpeg" },
-  { name: "Credit Scoring", href: "/dashboard/credit-scoring", icon: "/icons/22.jpeg" },
-  { name: "SMME Pipeline", href: "/dashboard/smme-pipeline", icon: "/icons/21.jpeg" },
-  { name: "Merchant", href: "/dashboard/merchant", icon: "/icons/20.jpeg" },
-  { name: "NthoppaSure", href: "/dashboard/nthoppa-sure", icon: "/icons/2.jpeg" },
-  { name: "Territory", href: "/dashboard/territory", icon: "/icons/19.jpeg" },
-  { name: "Communications", href: "/dashboard/communications", icon: "/icons/17.jpeg" },
-  { name: "Reports", href: "/dashboard/reports", icon: "/icons/5.jpeg" },
-  { name: "Settings", href: "/dashboard/settings", icon: "/icons/18.jpeg" },
+  { name: "Dashboard", href: "/dashboard/main", icon: LayoutDashboard },
+  { name: "Register User", href: "/dashboard/register", icon: UserPlus },
+  { name: "Users", href: "/dashboard/users", icon: Users },
+  { name: "Motshelo", href: "/dashboard/motshelo", icon: MotsheloIcon },
+  { name: "Education", href: "/dashboard/education", icon: BookOpen },
+  { name: "AI Advisor", href: "/dashboard/ai-advisor", icon: Brain, badge: "AI" },
+  { name: "Rewards", href: "/dashboard/gamification", icon: Trophy },
+  { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  { name: "Credit Scoring", href: "/dashboard/credit-scoring", icon: TrendingUp },
+  { name: "SMME Pipeline", href: "/dashboard/smme-pipeline", icon: SMEIcon },
+  { name: "Merchant", href: "/dashboard/merchant", icon: Store },
+  { name: "NthoppaSure", href: "/dashboard/nthoppa-sure", icon: NthoppaSureIcon },
+  { name: "Territory", href: "/dashboard/territory", icon: MapPin },
+  { name: "Communications", href: "/dashboard/communications", icon: MessageSquare },
+  { name: "Reports", href: "/dashboard/reports", icon: FileText },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 interface DashboardLayoutProps { children: React.ReactNode; type: "agent" | "admin"; }
@@ -265,6 +267,7 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
             <nav ref={sidebarRef} className="space-y-1" style={{ overflowY: 'auto', scrollBehavior: 'auto' }}>
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
+                const IconComponent = item.icon;
                 return (
                   <Link
                     key={item.name}
@@ -279,7 +282,7 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
                     )}
                     title={collapsed ? item.name : undefined}
                   >
-                    <img src={item.icon} alt={item.name} className="h-5 w-5 flex-shrink-0 rounded" />
+                    <IconComponent className="h-5 w-5 flex-shrink-0" />
                     {!collapsed && (
                       <>
                         <span className="flex-1">{item.name}</span>
