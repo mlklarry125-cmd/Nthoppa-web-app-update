@@ -48,23 +48,34 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const { toast } = useToast();
 
+  const checkAuth = async (retries = 3): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/auth/check', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setAdminName(data.name || "Administrator");
+        setAdminEmail(data.email || "");
+        return true;
+      } else if (retries > 0) {
+        await new Promise(r => setTimeout(r, 800));
+        return checkAuth(retries - 1);
+      } else {
+        router.push('/login');
+        return false;
+      }
+    } catch (error) {
+      if (retries > 0) {
+        await new Promise(r => setTimeout(r, 800));
+        return checkAuth(retries - 1);
+      }
+      router.push('/login');
+      return false;
+    }
+  };
+
   useEffect(() => {
     setLastLoginDate(new Date().toLocaleDateString());
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/auth/check', { credentials: 'include' });
-        if (res.ok) {
-          const data = await res.json();
-          setAdminName(data.name || "Administrator");
-          setAdminEmail(data.email || "");
-        } else {
-          router.push('/login');
-        }
-      } catch {
-        setAdminName("Administrator");
-      }
-    };
-    fetchUser();
+    checkAuth();
   }, [router]);
 
   const handleLogout = async () => {
@@ -79,8 +90,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const getInitials = (name: string) =>
     name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
-
-  const sidebarWidth = collapsed ? "w-16" : "w-64";
 
   return (
     <div className="min-h-screen w-full bg-gray-50">

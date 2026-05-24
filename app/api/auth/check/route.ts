@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { prisma } from '@/lib/prisma';
 
+// Demo user IDs that are hardcoded in the login route
+const DEMO_IDS = ['admin-001', 'agent-001', 'client-001', 'hr-001', 'merchant-001'];
+
 export async function GET(request: NextRequest) {
   try {
     // Debug: Log all cookies being received
@@ -37,6 +40,21 @@ export async function GET(request: NextRequest) {
     }
 
     console.log('✅ Auth check - Token verified for:', decoded.email, 'Role:', decoded.role);
+
+    // Handle demo users with hardcoded IDs (not in database)
+    if (DEMO_IDS.includes(decoded.id)) {
+      console.log('✅ Auth check - Demo user detected:', decoded.id);
+      const res = NextResponse.json({
+        authenticated: true,
+        id: decoded.id,
+        name: decoded.name,
+        email: decoded.email,
+        role: decoded.role,
+        territory: decoded.territory || null,
+      });
+      res.headers.set('Cache-Control', 'no-store');
+      return res;
+    }
 
     // First try to find user in User table
     let user = await prisma.user.findUnique({

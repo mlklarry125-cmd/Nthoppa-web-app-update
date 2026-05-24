@@ -83,61 +83,52 @@ export function DashboardLayout({ children, type }: DashboardLayoutProps) {
     }
   }, [pathname]);
 
+  const checkAuth = async (retries = 3): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/auth/check', { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        setAgentName(data.name || (type === "agent" ? "Agent" : "Admin"));
+        setAgentEmail(data.email || "");
+        setAgentTerritory(data.territory || (type === "agent" ? "Gaborone" : "Admin Portal"));
+        setAgentId(data.id || "");
+        
+        if (type === "agent" && data.id) {
+          loadNotifications();
+        }
+        return true;
+      } else if (retries > 0) {
+        await new Promise(r => setTimeout(r, 800));
+        return checkAuth(retries - 1);
+      } else {
+        router.push('/login');
+        return false;
+      }
+    } catch (error) {
+      if (retries > 0) {
+        await new Promise(r => setTimeout(r, 800));
+        return checkAuth(retries - 1);
+      }
+      router.push('/login');
+      return false;
+    }
+  };
+  
+  const loadNotifications = async () => {
+    try {
+      const response = await fetch('/api/notifications', { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        const unread = Array.isArray(data) ? data.filter((n: Notification) => !n.read) : [];
+        setNotifications(unread);
+        setNotificationCount(unread.length);
+      }
+    } catch {}
+  };
+
   useEffect(() => {
     setLastLoginDate(new Date().toLocaleDateString());
-    const loadUserData = async () => {
-      try {
-        const response = await fetch('/api/auth/check', { credentials: 'include' });
-        if (response.ok) {
-          const data = await response.json();
-          setAgentName(data.name || (type === "agent" ? "Agent" : "Admin"));
-          setAgentEmail(data.email || "");
-          setAgentTerritory(data.territory || (type === "agent" ? "Gaborone" : "Admin Portal"));
-          setAgentId(data.id || "");
-          
-          if (type === "agent" && data.id) {
-            loadNotifications();
-          }
-        } else {
-          if (type === "agent") {
-            const session = getAgentSession();
-            if (session) {
-              setAgentName(session.name);
-              setAgentTerritory(session.territory);
-              setAgentId(session.agentId);
-              loadNotifications();
-            } else {
-              router.push('/login');
-            }
-          } else {
-            router.push('/login');
-          }
-        }
-      } catch (error) {
-        console.error('Failed to load user data:', error);
-        setAgentName(type === "agent" ? "Agent" : "Admin");
-        if (type === "agent") {
-          setAgentTerritory("Gaborone");
-        }
-      }
-    };
-    
-    const loadNotifications = async () => {
-      try {
-        const response = await fetch('/api/notifications', { credentials: 'include' });
-        if (response.ok) {
-          const data = await response.json();
-          const unread = Array.isArray(data) ? data.filter((n: Notification) => !n.read) : [];
-          setNotifications(unread);
-          setNotificationCount(unread.length);
-        }
-      } catch {}
-    };
-
-    const loadAll = async () => {
-      await Promise.all([loadUserData(), loadNotifications()]);
-    };
-    loadAll();
+    checkAuth();
   }, [type, router]);
 
   const markAllAsRead = async () => {

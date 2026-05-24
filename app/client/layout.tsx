@@ -63,23 +63,34 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const router = useRouter();
   const { toast } = useToast();
 
+  const checkAuth = async (retries = 3): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/auth/check', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        setUserName(data.name || "User");
+        setUserEmail(data.email || "");
+        return true;
+      } else if (retries > 0) {
+        await new Promise(r => setTimeout(r, 800));
+        return checkAuth(retries - 1);
+      } else {
+        router.push("/login");
+        return false;
+      }
+    } catch (error) {
+      if (retries > 0) {
+        await new Promise(r => setTimeout(r, 800));
+        return checkAuth(retries - 1);
+      }
+      router.push("/login");
+      return false;
+    }
+  };
+
   useEffect(() => {
     setLastLoginDate(new Date().toLocaleDateString());
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/auth/check', { credentials: 'include' });
-        if (res.ok) {
-          const data = await res.json();
-          setUserName(data.name || "User");
-          setUserEmail(data.email || "");
-        } else {
-          router.push("/login");
-        }
-      } catch {
-        setUserName("User");
-      }
-    };
-    fetchUser();
+    checkAuth();
   }, [router]);
 
   const handleLogout = async () => {
