@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN "password" TEXT;
+ALTER TABLE "User" ADD COLUMN "role" TEXT;
+
+-- CreateIndex
+CREATE INDEX "User_role_idx" ON "User"("role");

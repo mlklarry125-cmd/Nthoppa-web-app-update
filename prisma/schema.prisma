@@ -1,0 +1,306 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String          @id @default(cuid())
+  fullName        String
+  email           String          @unique
+  phone           String
+  status          String          // active, pending, inactive
+  agentId         String?
+  completionRate  Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  // Gamification for users
+  nthoppaCoins    Int             @default(0)
+  
+  // Authentication fields
+  role            String?         // client, hr, merchant, admin, agent
+  password        String?         // bcrypt hashed password for authentication
+  
+  // Merchant-specific fields
+  businessName    String?         // Business name for merchants
+  businessType    String?         // Retail, Restaurant, Services, etc.
+  businessRegNumber String?       // Business registration number
+  taxId           String?         // Tax ID / BURS number
+  ownerName       String?         // Business owner full name
+  address         String?         // Physical address
+  city            String?         // City/Town
+  bankName        String?         // Bank name for payouts
+  accountNumber   String?         // Bank account number
+  branchCode      String?         // Bank branch code
+  
+  // Additional fields for financial profiling
+  country         String?
+  postalCode      String?
+  gender          String?
+  dateOfBirth     String?
+  employmentStatus String?
+  educationLevel  String?
+  industry        String?
+  monthlyIncome   String?
+  interests       String?         // JSON string array
+  territory       String?
+  registrationDate DateTime        @default(now())
+  
+  // Relations
+  agent           Agent?          @relation(fields: [agentId], references: [id])
+  communications  Communication[]
+  financialProfile FinancialProfile?
+  transactions    Transaction[]
+  motsheloMembers MotsheloMember[]
+  consents        ConsentRecord[]
+  courseProgress  UserCourseProgress[]
+  
+  @@index([agentId])
+  @@index([status])
+  @@index([email])
+  @@index([nthoppaCoins])
+  @@index([role])
+}
+
+model Agent {
+  id              String          @id @default(cuid())
+  name            String
+  email           String          @unique
+  loginEmail      String          @unique
+  loginPassword   String
+  territory       String
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  // Gamification fields
+  nthoppaCoins        Int              @default(0)
+  streakDays          Int              @default(0)
+  totalSavingsGenerated Float?         @default(0)
+  leaderboardRank     Int?
+  lastActiveDate      DateTime?
+  
+  // Relations
+  users           User[]
+  communications  Communication[]
+  reports         Report[]
+  achievements    AgentAchievement[]
+  gamificationEvents GamificationEvent[]
+  motsheloGroups  MotsheloGroup[]
+  notifications   Notification[]
+  
+  @@index([loginEmail])
+  @@index([territory])
+  @@index([isActive])
+  @@index([nthoppaCoins])
+  @@index([leaderboardRank])
+}
+
+model Communication {
+  id           String   @id @default(cuid())
+  fromAgentId  String
+  toUserId     String
+  message      String
+  type         String   // sms, email, whatsapp, call
+  status       String   // sent, delivered, failed, pending
+  timestamp    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  fromAgent Agent @relation(fields: [fromAgentId], references: [id], onDelete: Cascade)
+  toUser    User  @relation(fields: [toUserId], references: [id], onDelete: Cascade)
+  
+  @@index([fromAgentId])
+  @@index([toUserId])
+  @@index([timestamp])
+  @@index([status])
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  agentId     String
+  type        String   // users, communications, agents, performance
+  data        String   // JSON string
+  generatedAt DateTime @default(now())
+  
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  
+  @@index([agentId])
+  @@index([generatedAt])
+  @@index([type])
+}
+
+model AgentAchievement {
+  id            String   @id @default(cuid())
+  agentId       String
+  achievementId String
+  earnedAt      DateTime @default(now())
+  coinsAwarded  Int
+  
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  
+  @@unique([agentId, achievementId])
+  @@index([agentId])
+}
+
+model GamificationEvent {
+  id          String   @id @default(cuid())
+  agentId     String
+  eventType   String   // user_registered, completion_milestone, streak_bonus
+  coinsEarned Int
+  metadata    String?  // JSON string
+  createdAt   DateTime @default(now())
+  
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  
+  @@index([agentId])
+  @@index([createdAt])
+}
+
+model FinancialProfile {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  monthlyIncome       Float?
+  employmentStatus    String?
+  savingsGoal         Float?
+  riskTolerance       String?  // low, medium, high
+  literacyScore       Int      @default(0)
+  products            String?  // JSON string array
+  updatedAt           DateTime @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([literacyScore])
+}
+
+model Transaction {
+  id                 String   @id @default(cuid())
+  userId             String
+  amount             Float
+  category           String
+  description        String?
+  percentageOfIncome Float
+  trend              String   // increasing, decreasing, stable
+  date               DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([date])
+  @@index([category])
+}
+
+model MotsheloGroup {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  agentId     String
+  totalMembers Int     @default(0)
+  monthlyContribution Float
+  currentBalance Float  @default(0)
+  createdAt   DateTime @default(now())
+  status      String   @default("active") // active, completed, paused
+  
+  agent   Agent           @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  members MotsheloMember[]
+  
+  @@index([agentId])
+  @@index([status])
+}
+
+model MotsheloMember {
+  id          String   @id @default(cuid())
+  groupId     String
+  userId      String
+  joinedAt    DateTime @default(now())
+  totalPaid   Float    @default(0)
+  payoutOrder Int?
+  
+  group MotsheloGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([groupId, userId])
+  @@index([groupId])
+  @@index([userId])
+}
+
+model Course {
+  id           String   @id @default(cuid())
+  title        String   @unique
+  description  String
+  content      String   // JSON string with lessons array
+  coinsReward  Int      @default(50)
+  requiredScore Int     @default(0)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  progress     UserCourseProgress[]
+  
+  @@index([order])
+}
+
+model UserCourseProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  courseId    String
+  completedAt DateTime?
+  score       Int      @default(0)
+  coinsEarned Int      @default(0)
+  
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, courseId])
+  @@index([userId])
+}
+
+model ConsentRecord {
+  id          String   @id @default(cuid())
+  userId      String
+  consentType String   // data_sharing, marketing, partner_referral, analytics
+  granted     Boolean  @default(false)
+  grantedAt   DateTime?
+  revokedAt   DateTime?
+  updatedAt   DateTime @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, consentType])
+  @@index([userId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  agentId   String
+  type      String   // achievement, system, alert, reminder
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  agent Agent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  
+  @@index([agentId])
+  @@index([read])
+}
+
+model Subscriber {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  subscribedAt DateTime @default(now())
+  
+  @@index([email])
+}
+
+model WaitlistEntry {
+  id           String   @id @default(cuid())
+  email        String
+  phone        String?
+  fullName     String?
+  deviceType   String?  // android, ios, web
+  registeredAt DateTime @default(now())
+  
+  @@index([email])
+}
