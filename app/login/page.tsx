@@ -178,17 +178,47 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = (role: Role) => {
+  const handleDemoLogin = async (role: Role) => {
     const config = roleConfig[role];
     setSelectedRole(role);
-    setEmail(config.demoEmail);
-    setPassword(config.demoPassword);
-    // Auto-submit after brief delay
-    setTimeout(() => {
-      const formEvent = new Event("submit", { bubbles: true });
-      const form = document.querySelector("form");
-      if (form) form.dispatchEvent(formEvent);
-    }, 100);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: config.demoEmail,
+          password: config.demoPassword,
+          role: role,
+        }),
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast({
+          title: `Welcome! Logged in as ${config.label}`,
+          description: "Redirecting to your dashboard...",
+        });
+        router.push(config.dashboard);
+      } else {
+        toast({
+          title: "Demo Login Failed",
+          description: data.error || "Invalid credentials",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to connect to server",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
