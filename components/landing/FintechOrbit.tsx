@@ -25,7 +25,7 @@ export function FintechOrbit() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_46%,rgba(255,107,53,0.22),transparent_31%),radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.08),transparent_22%)]" />
       <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
 
-      {particles.map((particle, index) => (
+      {particles.map((particle) => (
         <motion.span
           key={`${particle.left}-${particle.top}`}
           className="absolute h-1.5 w-1.5 rounded-full bg-[#FF6B35] shadow-[0_0_14px_rgba(255,107,53,0.9)]"
@@ -60,12 +60,13 @@ export function FintechOrbit() {
       </div>
 
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
-        <motion.div
-          className="h-[230px] w-[360px] rounded-[50%] border border-white/10"
-          animate={reduceMotion ? undefined : { rotate: -360 }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          style={{ transform: "rotateX(68deg)" }}
-        />
+        <div style={{ transform: "rotateX(68deg)", transformStyle: "preserve-3d" }}>
+          <motion.div
+            className="h-[230px] w-[360px] rounded-[50%] border border-white/10"
+            animate={reduceMotion ? undefined : { rotate: -360 }}
+            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
       </div>
 
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -89,14 +90,16 @@ export function FintechOrbit() {
             <img src="/app-screen-coins.jpg" alt="" className="block h-auto w-full" />
           </div>
 
-          <motion.div
-            className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#FF6B35]/35 bg-[radial-gradient(circle_at_35%_30%,#ffb08d,#FF6B35_42%,#9f2f0f_100%)] shadow-[0_0_55px_rgba(255,107,53,0.58)]"
-            animate={reduceMotion ? undefined : { rotateY: 360 }}
-            transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <Coins className="h-10 w-10 text-white drop-shadow-md" strokeWidth={1.6} />
-          </motion.div>
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <motion.div
+              className="flex h-24 w-24 items-center justify-center rounded-full border border-[#FF6B35]/35 bg-[radial-gradient(circle_at_35%_30%,#ffb08d,#FF6B35_42%,#9f2f0f_100%)] shadow-[0_0_55px_rgba(255,107,53,0.58)]"
+              animate={reduceMotion ? undefined : { rotateY: 360 }}
+              transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              <Coins className="h-10 w-10 text-white drop-shadow-md" strokeWidth={1.6} />
+            </motion.div>
+          </div>
         </motion.div>
       </div>
 
