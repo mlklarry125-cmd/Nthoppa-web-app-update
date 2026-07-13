@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./galaxy.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Providers } from "@/components/providers/Providers";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
+import { GalaxyExperience } from "@/components/motion/GalaxyExperience";
 
 export const metadata: Metadata = {
   title: "Nthoppa - Financial Freedom for Everyone",
@@ -32,9 +34,8 @@ export default function RootLayout({
       <body className="h-full antialiased">
         <ErrorBoundary>
           <Providers>
-            <ClientLayoutWrapper>
-              {children}
-            </ClientLayoutWrapper>
+            <GalaxyExperience />
+            <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
             <Toaster />
           </Providers>
         </ErrorBoundary>
