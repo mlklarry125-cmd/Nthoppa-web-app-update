@@ -1,295 +1,277 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { 
-  Shield, 
-  Users, 
-  TrendingUp, 
-  Star, 
-  CheckCircle,
-  Building2,
-  Heart,
-  ShoppingBag,
-} from "lucide-react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  CheckCircle,
+  GraduationCap,
+  Landmark,
+  ShieldCheck,
+  ShoppingBag,
+  Smartphone,
+  Store,
+  TrendingUp,
+  Users,
+} from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Partners } from "@/components/landing/Partners";
 import { CreditScoring } from "@/components/landing/CreditScoring";
 import { Offerings } from "@/components/landing/Offerings";
 
-// NthoppaSure Products Data
-const nthoppaSureProducts = [
+const marketplaceProducts = [
   {
-    id: "funeral",
-    name: "Funeral Cover",
-    icon: Heart,
-    description: "Dignified funeral cover for you and your loved ones with tiered options",
-    tiers: [
-      { name: "Individual", price: 45, cover: "P15,000" },
-      { name: "Family", price: 85, cover: "P30,000" },
-      { name: "Extended Family", price: 120, cover: "P50,000" },
-    ],
-    popular: true,
+    icon: ShieldCheck,
+    title: "Insurance",
+    description: "Motor, home, life, and funeral coverage from trusted providers.",
   },
   {
-    id: "personal-all-risk",
-    name: "Personal All-Risk Insurance",
-    icon: Shield,
-    description: "Comprehensive cover for personal belongings, electronics, and valuables",
-    tiers: [
-      { name: "Basic", price: 65, cover: "P10,000" },
-      { name: "Standard", price: 110, cover: "P25,000" },
-      { name: "Premium", price: 180, cover: "P50,000" },
-    ],
-    popular: false,
+    icon: TrendingUp,
+    title: "Investments",
+    description: "Accessible investment opportunities designed for long-term growth.",
   },
   {
-    id: "group-life",
-    name: "Group Life Cover",
-    icon: Users,
-    description: "Employer-sponsored group life insurance for your workforce",
-    tiers: [
-      { name: "Per Employee", price: 35, cover: "P25,000" },
-      { name: "Executive", price: 95, cover: "P75,000" },
-    ],
-    popular: false,
+    icon: Smartphone,
+    title: "Airtime & Data",
+    description: "Instant purchases for major Botswana mobile networks.",
+  },
+  {
+    icon: Landmark,
+    title: "Banking Products",
+    description: "Entry-level accounts and savings products from partner banks.",
   },
 ];
 
-// Mock Reviews Data
-const reviews = [
+const smmeStages = [
   {
-    id: 1,
-    name: "Tshepo Molefe",
-    role: "Small Business Owner, Gaborone",
-    rating: 5,
-    text: "Nthoppa transformed how I save for my business. The Motshelo feature helped me save P15,000 in just 6 months!",
-    date: "2 weeks ago",
+    icon: Store,
+    title: "Informal Traders",
+    description: "Identify and onboard micro-entrepreneurs at the base of the economy.",
   },
   {
-    id: 2,
-    name: "Keitumetse Nkosi",
-    role: "Teacher, Francistown",
-    rating: 5,
-    text: "The financial literacy courses changed my life. I finally understand budgeting and investing.",
-    date: "1 month ago",
+    icon: GraduationCap,
+    title: "Skills Qualification",
+    description: "Track financial discipline and readiness for formal products.",
   },
   {
-    id: 3,
-    name: "Modisa Radipabe",
-    role: "Informal Trader, Maun",
-    rating: 5,
-    text: "NthoppaSure funeral cover gave my family peace of mind. The claim process was smooth and fast.",
-    date: "3 months ago",
+    icon: Landmark,
+    title: "Business Banking Ready",
+    description: "Bridge qualified traders into SME accounts and working-capital solutions.",
   },
+];
+
+const pipelineProgress = [
+  { stage: "Informal Traders Identified", value: 12480, percentage: 100 },
+  { stage: "Skills & Readiness Qualified", value: 5240, percentage: 42 },
+  { stage: "Business Banking Ready", value: 863, percentage: 7 },
 ];
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress(total > 0 ? window.scrollY / total : 0);
-    };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <div className="min-h-screen bg-white">
       <Navbar scrolled={scrolled} />
 
-      {/* Optional: Scroll progress bar - uncomment if desired */}
-      {/* <div className="fixed top-0 left-0 right-0 h-1 bg-[#FF6B35] z-50" style={{ width: `${scrollProgress * 100}%` }} /> */}
-
       <main>
-        {/* Hero Section */}
-        <section className="relative min-h-screen bg-[#0a0a0a] flex items-center overflow-hidden pt-20">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#FF6B35]/20 rounded-full blur-[120px] animate-pulse" />
-            <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#FF6B35]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <section className="relative flex min-h-screen items-center overflow-hidden bg-[#0a0a0a] pt-20">
+          <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+            <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-[#FF6B35]/18 blur-[120px]" />
+            <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-[#FF6B35]/10 blur-[100px]" />
           </div>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center py-24">
+          <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-2">
             <div>
-              <div className="inline-flex items-center gap-2 bg-[#FF6B35]/10 border border-[#FF6B35]/30 rounded-full px-4 py-2 mb-8">
-                <div className="w-2 h-2 bg-[#FF6B35] rounded-full animate-pulse" />
-                <span className="text-[#FF6B35] font-body text-sm font-semibold">Botswana's #1 Fintech Platform</span>
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-[#FF6B35]/25 bg-[#FF6B35]/8 px-4 py-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B35]" aria-hidden="true" />
+                <span className="font-body text-sm font-semibold text-[#FF6B35]">
+                  Botswana&apos;s fintech ecosystem
+                </span>
               </div>
-              <h1 className="font-display text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-6">
-                Financial<br />
-                <span className="text-[#FF6B35]">Freedom</span><br />
+
+              <h1 className="mb-6 font-display text-6xl font-black leading-[0.92] tracking-tighter text-white lg:text-8xl">
+                Financial
+                <br />
+                <span className="text-[#FF6B35]">Freedom</span>
+                <br />
                 for Everyone
               </h1>
-              <p className="font-body text-white/60 text-lg leading-relaxed mb-10 max-w-md">
-                Empowering the unbanked through financial education, inclusive banking products, and rewards that transform lives.
+
+              <p className="mb-10 max-w-md font-body text-lg leading-relaxed text-white/60">
+                Financial education, inclusive products, and practical tools designed to help people and businesses move forward.
               </p>
-              <div className="flex flex-wrap gap-4 mb-12">
-                <Link href="/login">
-                  <button className="inline-flex items-center gap-3 bg-[#FF6B35] text-white font-body font-bold px-7 py-4 rounded-2xl hover:bg-[#e55a2b] transition-all shadow-[0_8px_32px_rgba(255,107,53,0.4)] text-sm">
-                    Get Started →
-                  </button>
+
+              <div className="mb-12 flex flex-wrap gap-4">
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#FF6B35] px-7 py-4 text-sm font-bold text-white shadow-[0_12px_30px_rgba(255,107,53,0.28)] transition hover:bg-[#e55a2b]"
+                >
+                  Get started
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
-              <div className="flex items-center gap-8">
+
+              <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
                 {[
-                  { value: '24,891', label: 'Total Users' },
-                  { value: '8,342', label: 'Active Agents' },
-                  { value: '712', label: 'Avg Credit Score' },
-                ].map(stat => (
+                  { value: "24,891", label: "Total Users" },
+                  { value: "8,342", label: "Active Agents" },
+                  { value: "712", label: "Average Credit Score" },
+                ].map((stat) => (
                   <div key={stat.label}>
                     <div className="font-display text-2xl font-black text-white">{stat.value}</div>
-                    <div className="font-body text-white/40 text-xs mt-0.5">{stat.label}</div>
+                    <div className="mt-0.5 text-xs text-white/40">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="relative flex items-end justify-center gap-5 h-[560px]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-72 h-72 bg-[#FF6B35]/25 rounded-full blur-[80px]" />
+            <div className="relative flex h-[560px] items-end justify-center gap-5">
+              <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                <div className="h-72 w-72 rounded-full bg-[#FF6B35]/20 blur-[80px]" />
               </div>
+
               <motion.div
-                animate={{ y: [0, -12, 0] }}
+                animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-[175px] mt-16 z-10"
+                className="relative z-10 mt-16 w-[175px]"
               >
-                <div className="rounded-[2.8rem] overflow-hidden border-[3px] border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.8)]">
-                  <img src="/app-screen-home.jpg" alt="Nthoppa App" className="w-full h-auto block" />
+                <div className="overflow-hidden rounded-[2.8rem] border-[3px] border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.8)]">
+                  <img src="/app-screen-home.jpg" alt="Nthoppa mobile dashboard" className="block h-auto w-full" />
                 </div>
               </motion.div>
+
               <motion.div
-                animate={{ y: [0, -12, 0] }}
+                animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                className="relative w-[175px] mb-16 z-10"
+                className="relative z-10 mb-16 w-[175px]"
               >
-                <div className="rounded-[2.8rem] overflow-hidden border-[3px] border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.8)]">
-                  <img src="/app-screen-coins.jpg" alt="Nthoppa Rewards" className="w-full h-auto block" />
+                <div className="overflow-hidden rounded-[2.8rem] border-[3px] border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.8)]">
+                  <img src="/app-screen-coins.jpg" alt="Nthoppa rewards screen" className="block h-auto w-full" />
                 </div>
               </motion.div>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white" />
+
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-white" aria-hidden="true" />
         </section>
 
-        {/* Offerings Section */}
-        <div id="offerings">
-          <Offerings />
-        </div>
+        <Offerings />
 
-        {/* Partners Section */}
         <div id="partners">
           <Partners />
         </div>
 
-        {/* Banking Section */}
-        <section id="banking" className="bg-[#0a0a0a] py-32 relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 relative z-10">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-[#FF6B35]/10 rounded-full px-4 py-2 mb-4">
-                <ShoppingBag className="w-4 h-4 text-[#FF6B35]" />
-                <span className="font-body text-[#FF6B35] font-semibold text-sm">Fintech Marketplace</span>
+        <section id="banking" className="relative overflow-hidden bg-[#0a0a0a] py-28">
+          <div className="relative z-10 mx-auto max-w-7xl px-6">
+            <div className="mb-16 text-center">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                <ShoppingBag className="h-4 w-4 text-[#FF6B35]" strokeWidth={1.8} aria-hidden="true" />
+                <span className="text-sm font-semibold text-[#FF6B35]">Fintech Marketplace</span>
               </div>
-              <h2 className="font-display text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
-                Access Financial<br />Products <span className="text-[#FF6B35]">You Need</span>
+              <h2 className="mb-6 font-display text-5xl font-black leading-tight text-white lg:text-6xl">
+                Access Financial
+                <br />
+                Products <span className="text-[#FF6B35]">You Need</span>
               </h2>
+              <p className="mx-auto max-w-2xl text-base leading-relaxed text-white/50">
+                A focused marketplace connecting users to essential financial services without visual clutter.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { icon: '🛡️', title: 'Insurance', description: 'Motor, home, life, and funeral coverage from trusted providers' },
-                { icon: '📈', title: 'Investments', description: 'Low-cost investment opportunities starting from P500 minimum' },
-                { icon: '📱', title: 'Airtime & Data', description: 'Instant purchases for all major Botswana networks' },
-                { icon: '🏦', title: 'Banking Products', description: 'Entry-level accounts and savings products from partner banks' },
-              ].map((product, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="group bg-white/5 rounded-2xl p-6 border border-white/10 hover:border-[#FF6B35]/40 transition-all"
-                >
-                  <div className="text-5xl mb-4">{product.icon}</div>
-                  <h3 className="font-bold text-white text-xl mb-2">{product.title}</h3>
-                  <p className="text-white/50 text-sm">{product.description}</p>
-                </motion.div>
-              ))}
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+              {marketplaceProducts.map((product, index) => {
+                const Icon = product.icon;
+                return (
+                  <motion.article
+                    key={product.title}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: index * 0.06 }}
+                    className="group rounded-2xl border border-white/10 bg-white/[0.035] p-6 transition hover:border-[#FF6B35]/35 hover:bg-white/[0.055]"
+                  >
+                    <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/70 transition group-hover:border-[#FF6B35]/25 group-hover:text-[#FF6B35]">
+                      <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+                    </div>
+                    <h3 className="mb-2 text-xl font-bold text-white">{product.title}</h3>
+                    <p className="text-sm leading-relaxed text-white/50">{product.description}</p>
+                  </motion.article>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* Credit Scoring Section */}
         <section id="credit" className="relative">
           <CreditScoring />
         </section>
 
-        {/* SME Pipeline Section */}
-        <section id="sme-pipeline" className="bg-[#0a0a0a] py-32 relative overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 bg-[#FF6B35]/10 rounded-full px-4 py-2 mb-4">
-                <TrendingUp className="w-4 h-4 text-[#FF6B35]" />
-                <span className="font-body text-[#FF6B35] font-semibold text-sm">SME Pipeline Development</span>
+        <section id="sme-pipeline" className="relative overflow-hidden bg-[#0a0a0a] py-28">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-16 text-center">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                <TrendingUp className="h-4 w-4 text-[#FF6B35]" strokeWidth={1.8} aria-hidden="true" />
+                <span className="text-sm font-semibold text-[#FF6B35]">SME Pipeline Development</span>
               </div>
-              <h2 className="font-display text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
-                From Informal Trader<br />to <span className="text-[#FF6B35]">Business Banking</span>
+              <h2 className="mb-6 font-display text-5xl font-black leading-tight text-white lg:text-6xl">
+                From Informal Trader
+                <br />
+                to <span className="text-[#FF6B35]">Business Banking</span>
               </h2>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <div className="grid items-start gap-12 lg:grid-cols-2">
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -24 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.55 }}
                 viewport={{ once: true }}
                 className="space-y-4"
               >
-                {[
-                  { icon: '🏪', title: 'Informal Traders', desc: 'Identify and onboard micro-entrepreneurs at the base of the pyramid' },
-                  { icon: '📈', title: 'Skills Qualification', desc: 'Track financial discipline scores that signal readiness for formal products' },
-                  { icon: '🏦', title: 'Business Banking Ready', desc: 'Bridge informal traders into SME accounts and working capital solutions' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-4 p-5 rounded-2xl bg-white/5 border border-white/5">
-                    <span className="text-3xl">{item.icon}</span>
-                    <div>
-                      <div className="font-bold text-white text-base mb-1">{item.title}</div>
-                      <div className="text-white/40 text-sm">{item.desc}</div>
-                    </div>
-                  </div>
-                ))}
+                {smmeStages.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <article key={item.title} className="flex items-start gap-4 rounded-2xl border border-white/8 bg-white/[0.035] p-5">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[#FF6B35]">
+                        <Icon className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+                      </div>
+                      <div>
+                        <h3 className="mb-1 text-base font-bold text-white">{item.title}</h3>
+                        <p className="text-sm leading-relaxed text-white/45">{item.description}</p>
+                      </div>
+                    </article>
+                  );
+                })}
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.55 }}
                 viewport={{ once: true }}
-                className="bg-white/5 border border-white/10 rounded-3xl p-8"
+                className="rounded-3xl border border-white/10 bg-white/[0.035] p-8"
               >
-                <div className="font-body text-white/40 text-xs uppercase tracking-widest mb-6">SMME Pipeline Progress</div>
-                {[
-                  { stage: 'Informal Traders Identified', value: 12480, pct: 100 },
-                  { stage: 'Skills & Readiness Qualified', value: 5240, pct: 42 },
-                  { stage: 'Business Banking Ready', value: 863, pct: 7 },
-                ].map((item, i) => (
-                  <div key={i} className="mb-6">
-                    <div className="flex justify-between mb-2">
-                      <span className="text-white/70 text-sm">{item.stage}</span>
-                      <span className="text-white font-bold text-sm">{item.value.toLocaleString()}</span>
+                <div className="mb-6 text-xs uppercase tracking-[0.18em] text-white/40">SMME Pipeline Progress</div>
+                {pipelineProgress.map((item, index) => (
+                  <div key={item.stage} className="mb-6 last:mb-0">
+                    <div className="mb-2 flex justify-between gap-4">
+                      <span className="text-sm text-white/70">{item.stage}</span>
+                      <span className="text-sm font-bold text-white">{item.value.toLocaleString()}</span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }} 
-                        whileInView={{ width: `${item.pct}%` }} 
-                        viewport={{ once: true }} 
-                        transition={{ duration: 1, delay: i * 0.15 }}
-                        className="h-full bg-[#FF6B35] rounded-full"
+                    <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${item.percentage}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.9, delay: index * 0.12 }}
+                        className="h-full rounded-full bg-[#FF6B35]"
                       />
                     </div>
                   </div>
@@ -299,83 +281,81 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Incubator Section */}
-        <section id="incubator" className="bg-white py-32">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <section id="incubator" className="bg-white py-28">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="grid items-center gap-12 lg:grid-cols-2">
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
+                initial={{ opacity: 0, x: -24 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.55 }}
                 viewport={{ once: true }}
               >
-                <div className="flex items-center gap-3 mb-4">
+                <div className="mb-5 flex items-center gap-3">
                   <img src="/nthoppa-logo.png" alt="Nthoppa" className="h-10 w-auto" />
                   <span className="text-2xl font-bold text-[#FF6B35]">Accelerate</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+
+                <h2 className="mb-4 text-3xl font-bold tracking-tight text-gray-950 md:text-4xl">
                   Incubator Program for Entrepreneurs
                 </h2>
-                <p className="text-gray-600 text-lg mb-6">
-                  Nthoppa Accelerate is a 12-week intensive program that provides funding, mentorship, 
-                  and resources to Botswana's most promising small businesses.
+                <p className="mb-6 text-lg leading-relaxed text-gray-600">
+                  A focused 12-week program providing funding, mentorship, and practical resources to Botswana&apos;s promising small businesses.
                 </p>
-                <div className="space-y-4 mb-8">
+
+                <div className="mb-8 space-y-4">
                   {[
                     "Up to P50,000 in seed funding",
                     "One-on-one mentorship with industry experts",
-                    "Access to our network of partners and investors",
-                    "Free premium access to all Nthoppa tools",
+                    "Access to partners and investors",
+                    "Premium access to Nthoppa business tools",
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-[#FF6B35]" />
-                      <span>{item}</span>
+                      <CheckCircle className="h-5 w-5 flex-shrink-0 text-[#FF6B35]" strokeWidth={1.8} aria-hidden="true" />
+                      <span className="text-gray-700">{item}</span>
                     </div>
                   ))}
                 </div>
-                <Link href="/login">
-                  <button className="bg-[#FF6B35] hover:bg-[#e55a2b] text-white rounded-full px-8 py-3 text-lg font-semibold transition-all">
-                    Apply Now →
-                  </button>
+
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#FF6B35] px-7 py-3.5 text-base font-semibold text-white transition hover:bg-[#e55a2b]"
+                >
+                  Apply now
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </motion.div>
-              
+
               <motion.div
-                initial={{ opacity: 0, x: 30 }}
+                initial={{ opacity: 0, x: 24 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.55 }}
                 viewport={{ once: true }}
-                className="relative"
+                className="rounded-3xl border border-gray-800 bg-[#0a0a0a] p-8 text-white shadow-[0_24px_70px_rgba(15,23,42,0.16)]"
               >
-                <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-16 h-16 rounded-full bg-[#FF6B35]/20 flex items-center justify-center">
-                      <Users className="h-8 w-8 text-[#FF6B35]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">Graduates</p>
-                      <p className="text-3xl font-bold">127+</p>
-                    </div>
-                    <div className="w-px h-12 bg-white/20 mx-4"></div>
-                    <div>
-                      <p className="text-sm text-gray-400">Businesses Funded</p>
-                      <p className="text-3xl font-bold">89</p>
-                    </div>
+                <div className="mb-6 flex flex-wrap items-center gap-6">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[#FF6B35]">
+                    <Users className="h-6 w-6" strokeWidth={1.8} aria-hidden="true" />
                   </div>
-                  
-                  <div className="border-t border-white/20 pt-6">
-                    <p className="text-gray-300 italic mb-4">
-                      "The Nthoppa Accelerate program took my catering business from my kitchen to a 
-                      commercial space. Now I employ 5 people and serve 200+ customers monthly!"
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#FF6B35] flex items-center justify-center">
-                        <span className="text-sm font-bold">KM</span>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Kefilwe M.</p>
-                        <p className="text-xs text-gray-400">K's Kitchen, Gaborone</p>
-                      </div>
+                  <div>
+                    <p className="text-sm text-white/40">Graduates</p>
+                    <p className="text-3xl font-bold">127+</p>
+                  </div>
+                  <div className="h-12 w-px bg-white/10" />
+                  <div>
+                    <p className="text-sm text-white/40">Businesses Funded</p>
+                    <p className="text-3xl font-bold">89</p>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/10 pt-6">
+                  <p className="mb-4 leading-relaxed text-white/70">
+                    “The Nthoppa Accelerate program helped move my catering business from a home operation into a commercial space.”
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FF6B35] text-sm font-bold">KM</div>
+                    <div>
+                      <p className="font-semibold">Kefilwe M.</p>
+                      <p className="text-xs text-white/40">K&apos;s Kitchen, Gaborone</p>
                     </div>
                   </div>
                 </div>
@@ -384,84 +364,78 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-[#FF6B35] to-[#FF8F5e] text-white">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <section className="bg-[#FF6B35] py-20 text-white">
+          <div className="mx-auto max-w-7xl px-6 text-center">
+            <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl">
               Ready to Take Control of Your Financial Future?
             </h2>
-            <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-              Join over 50,000 Batswana who trust Nthoppa for their banking, insurance, and investment needs.
+            <p className="mx-auto mb-8 max-w-2xl text-lg text-white/85">
+              Access practical tools for banking, insurance, education, savings, and business growth.
             </p>
-            <Link href="/login">
-              <button className="bg-white text-[#FF6B35] hover:bg-gray-100 rounded-full px-8 py-3 text-lg font-semibold transition-all">
-                Get Started Free →
-              </button>
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 text-base font-semibold text-[#FF6B35] transition hover:bg-gray-100"
+            >
+              Get started
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#050505] border-t border-white/5 py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+      <footer className="border-t border-white/5 bg-[#050505] py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-12 grid grid-cols-2 gap-12 lg:grid-cols-4">
             <div className="col-span-2 lg:col-span-1">
-              <div className="flex items-center gap-3 mb-4">
+              <div className="mb-4 flex items-center gap-3">
                 <img src="/nthoppa-logo.png" alt="Nthoppa" className="h-9 w-9 object-cover" />
-                <span className="font-display font-black text-white text-lg">Nthoppa</span>
+                <span className="font-display text-lg font-black text-white">Nthoppa</span>
               </div>
-              <p className="font-body text-white/40 text-sm">Empowering the unbanked with financial education, marketplace access, and rewards that transform lives.</p>
+              <p className="text-sm leading-relaxed text-white/40">
+                Financial education, marketplace access, and digital tools built for inclusive growth.
+              </p>
             </div>
-            
+
             <div>
-              <div className="font-body font-semibold text-white/60 text-xs uppercase tracking-widest mb-4">Quick Links</div>
-              <a href="/#offerings" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Offerings
-              </a>
-              <a href="/#partners" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Partners
-              </a>
-              <a href="/#banking" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Banking
-              </a>
-              <a href="/#credit" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Credit
-              </a>
-              <a href="/#sme-pipeline" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                SME Pipeline
-              </a>
-              <a href="/#incubator" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Incubator
-              </a>
+              <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/60">Quick Links</div>
+              {[
+                ["Offerings", "/#offerings"],
+                ["Partners", "/#partners"],
+                ["Banking", "/#banking"],
+                ["Credit", "/#credit"],
+                ["SME Pipeline", "/#sme-pipeline"],
+                ["Incubator", "/#incubator"],
+              ].map(([label, href]) => (
+                <a key={href} href={href} className="mb-3 block text-sm text-white/40 transition-colors hover:text-[#FF6B35]">
+                  {label}
+                </a>
+              ))}
             </div>
-            
+
             <div>
-              <div className="font-body font-semibold text-white/60 text-xs uppercase tracking-widest mb-4">Legal</div>
-              <a href="/terms" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Terms & Conditions
-              </a>
-              <a href="/privacy-policy" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="/cookie-policy" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Cookie Policy
-              </a>
-              <a href="/disclaimer" className="block font-body text-white/40 hover:text-[#FF6B35] text-sm mb-3 transition-colors">
-                Disclaimer
-              </a>
+              <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/60">Legal</div>
+              {[
+                ["Terms & Conditions", "/terms"],
+                ["Privacy Policy", "/privacy-policy"],
+                ["Cookie Policy", "/cookie-policy"],
+                ["Disclaimer", "/disclaimer"],
+              ].map(([label, href]) => (
+                <a key={href} href={href} className="mb-3 block text-sm text-white/40 transition-colors hover:text-[#FF6B35]">
+                  {label}
+                </a>
+              ))}
             </div>
-            
+
             <div>
-              <div className="font-body font-semibold text-white/60 text-xs uppercase tracking-widest mb-4">Contact</div>
-              <div className="font-body text-white/40 text-sm mb-2">info@nthoppa.com</div>
-              <div className="font-body text-white/40 text-sm mb-2">+267 75 736 600</div>
-              <div className="font-body text-white/40 text-sm">Gaborone, Botswana</div>
+              <div className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/60">Contact</div>
+              <div className="mb-2 text-sm text-white/40">info@nthoppa.com</div>
+              <div className="mb-2 text-sm text-white/40">+267 75 736 600</div>
+              <div className="text-sm text-white/40">Gaborone, Botswana</div>
             </div>
           </div>
-          
-          <div className="border-t border-white/5 pt-8 text-center">
-            <div className="font-body text-white/20 text-xs">© 2026 Nthoppa. All rights reserved.</div>
+
+          <div className="border-t border-white/5 pt-8 text-center text-xs text-white/20">
+            © 2026 Nthoppa. All rights reserved.
           </div>
         </div>
       </footer>
