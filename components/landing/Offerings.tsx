@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { FintechOrbit } from "@/components/landing/FintechOrbit";
 import {
   ArrowRight,
   BookOpen,
@@ -87,6 +88,8 @@ export function Offerings() {
             One platform for banking, insurance, savings, education, and rewards.
           </motion.p>
         </div>
+
+        <FintechOrbit />
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {offerings.map((offering, index) => {
