@@ -1,149 +1,211 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { Coins, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
+import { useState, type PointerEvent } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import {
+  BookOpen,
+  Coins,
+  HandCoins,
+  PiggyBank,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  UsersRound,
+} from "lucide-react";
 
-const particles = [
-  { left: "8%", top: "18%", delay: 0.1, duration: 4.8 },
-  { left: "18%", top: "72%", delay: 1.2, duration: 5.6 },
-  { left: "31%", top: "10%", delay: 0.7, duration: 4.2 },
-  { left: "64%", top: "16%", delay: 1.8, duration: 5.2 },
-  { left: "76%", top: "76%", delay: 0.4, duration: 4.7 },
-  { left: "91%", top: "30%", delay: 1.4, duration: 5.9 },
+const realms = [
+  {
+    id: "savings",
+    label: "Savings",
+    value: "P 6,750",
+    detail: "67% of your emergency-fund goal reached.",
+    icon: PiggyBank,
+    position: { left: "7%", top: "13%" },
+  },
+  {
+    id: "invest",
+    label: "Invest",
+    value: "+18.4%",
+    detail: "Your portfolio is moving beyond its six-month target.",
+    icon: TrendingUp,
+    position: { right: "7%", top: "13%" },
+  },
+  {
+    id: "insurance",
+    label: "NthoppaSure",
+    value: "Protected",
+    detail: "Flexible cover for life, property, family, and business.",
+    icon: ShieldCheck,
+    position: { left: "5%", top: "48%" },
+  },
+  {
+    id: "credit",
+    label: "Borrow",
+    value: "712 score",
+    detail: "Responsible activity unlocks clearer credit pathways.",
+    icon: HandCoins,
+    position: { right: "5%", top: "48%" },
+  },
+  {
+    id: "learn",
+    label: "Learn",
+    value: "24 modules",
+    detail: "Build practical financial confidence one mission at a time.",
+    icon: BookOpen,
+    position: { left: "12%", top: "72%" },
+  },
+  {
+    id: "community",
+    label: "Motshelo",
+    value: "8 members",
+    detail: "Transparent group saving, collections, records, and payouts.",
+    icon: UsersRound,
+    position: { right: "12%", top: "72%" },
+  },
 ];
 
 export function FintechOrbit() {
+  const [activeRealm, setActiveRealm] = useState(realms[0]);
   const reduceMotion = useReducedMotion();
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const sceneRotateY = useSpring(useTransform(pointerX, [-1, 1], [-7, 7]), {
+    stiffness: 90,
+    damping: 20,
+  });
+  const sceneRotateX = useSpring(useTransform(pointerY, [-1, 1], [5, -5]), {
+    stiffness: 90,
+    damping: 20,
+  });
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerX.set(((event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5) * 2);
+    pointerY.set(((event.clientY - rect.top) / Math.max(rect.height, 1) - 0.5) * 2);
+  };
+
+  const resetPerspective = () => {
+    pointerX.set(0);
+    pointerY.set(0);
+  };
 
   return (
     <div
-      className="relative mx-auto mb-16 h-[430px] max-w-5xl overflow-hidden rounded-[2rem] border border-gray-200 bg-[#080808] shadow-[0_28px_80px_rgba(15,23,42,0.16)]"
-      style={{ perspective: "1200px" }}
-      aria-label="Animated Nthoppa digital finance ecosystem"
-      role="img"
+      className="fintech-galaxy mb-16"
+      onPointerMove={handlePointerMove}
+      onPointerLeave={resetPerspective}
+      aria-label="Interactive Nthoppa financial galaxy"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_46%,rgba(255,107,53,0.22),transparent_31%),radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.08),transparent_22%)]" />
-      <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <motion.div
+        className="fintech-galaxy__scene"
+        style={{ rotateX: sceneRotateX, rotateY: sceneRotateY, transformStyle: "preserve-3d" }}
+      >
+        <div className="fintech-galaxy__orbit fintech-galaxy__orbit--one" aria-hidden="true" />
+        <div className="fintech-galaxy__orbit fintech-galaxy__orbit--two" aria-hidden="true" />
+        <div className="fintech-galaxy__orbit fintech-galaxy__orbit--three" aria-hidden="true" />
 
-      {particles.map((particle) => (
-        <motion.span
-          key={`${particle.left}-${particle.top}`}
-          className="absolute h-1.5 w-1.5 rounded-full bg-[#FF6B35] shadow-[0_0_14px_rgba(255,107,53,0.9)]"
-          style={{ left: particle.left, top: particle.top }}
-          animate={
-            reduceMotion
-              ? undefined
-              : {
-                  y: [0, -14, 0],
-                  opacity: [0.25, 0.95, 0.25],
-                  scale: [0.8, 1.35, 0.8],
-                }
-          }
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          aria-hidden="true"
-        />
-      ))}
-
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
         <motion.div
-          className="h-[310px] w-[310px] rounded-full border border-[#FF6B35]/25 sm:h-[360px] sm:w-[360px]"
-          animate={reduceMotion ? undefined : { rotate: 360 }}
-          transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+          className="fintech-galaxy__phone fintech-galaxy__phone--left"
+          animate={reduceMotion ? undefined : { y: [0, -12, 0] }}
+          transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}
         >
-          <span className="absolute left-1/2 top-[-5px] h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-[#FF6B35] shadow-[0_0_20px_rgba(255,107,53,1)]" />
+          <img src="/app-screen-home.jpg" alt="Nthoppa mobile dashboard" />
         </motion.div>
-      </div>
 
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" aria-hidden="true">
-        <div style={{ transform: "rotateX(68deg)", transformStyle: "preserve-3d" }}>
+        <motion.div
+          className="fintech-galaxy__phone fintech-galaxy__phone--right"
+          animate={reduceMotion ? undefined : { y: [0, 11, 0] }}
+          transition={{ duration: 6.4, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
+        >
+          <img src="/app-screen-coins.jpg" alt="Nthoppa rewards dashboard" />
+        </motion.div>
+
+        <div className="fintech-galaxy__portal-base" aria-hidden="true" />
+
+        <div className="absolute left-1/2 top-[47%] z-[8] -translate-x-1/2 -translate-y-1/2">
           <motion.div
-            className="h-[230px] w-[360px] rounded-[50%] border border-white/10"
-            animate={reduceMotion ? undefined : { rotate: -360 }}
-            transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-          />
+            drag={!reduceMotion}
+            dragConstraints={{ left: -42, right: 42, top: -30, bottom: 30 }}
+            dragElastic={0.16}
+            dragSnapToOrigin
+            whileTap={{ scale: 0.94 }}
+            animate={reduceMotion ? undefined : { rotateY: [0, 360], y: [0, -12, 0] }}
+            transition={{
+              rotateY: { duration: 12, repeat: Infinity, ease: "linear" },
+              y: { duration: 4.8, repeat: Infinity, ease: "easeInOut" },
+            }}
+            className="relative aspect-square w-[154px] cursor-grab [transform-style:preserve-3d] active:cursor-grabbing sm:w-[210px]"
+            aria-label="Draggable 3D Nthoppa coin"
+            role="img"
+          >
+            <div className="nthoppa-coin-3d__edge" aria-hidden="true" />
+            <div className="nthoppa-coin-3d__face">
+              <span>N</span>
+            </div>
+          </motion.div>
         </div>
-      </div>
 
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <motion.div
-          className="relative h-[330px] w-[300px]"
-          animate={reduceMotion ? undefined : { y: [0, -10, 0], rotateY: [-4, 4, -4] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          style={{ transformStyle: "preserve-3d" }}
-        >
-          <div
-            className="absolute left-[22px] top-[62px] w-[154px] overflow-hidden rounded-[2.2rem] border-[3px] border-white/15 bg-black shadow-[0_28px_70px_rgba(0,0,0,0.72)] sm:left-[14px] sm:w-[170px]"
-            style={{ transform: "rotateY(12deg) rotateZ(-5deg) translateZ(34px)" }}
-          >
-            <img src="/app-screen-home.jpg" alt="" className="block h-auto w-full" />
-          </div>
+        {realms.map((realm) => {
+          const Icon = realm.icon;
+          const active = realm.id === activeRealm.id;
 
-          <div
-            className="absolute right-[14px] top-[30px] w-[142px] overflow-hidden rounded-[2rem] border-[3px] border-white/10 bg-black opacity-90 shadow-[0_24px_60px_rgba(0,0,0,0.62)] sm:w-[158px]"
-            style={{ transform: "rotateY(-12deg) rotateZ(6deg) translateZ(-30px)" }}
-          >
-            <img src="/app-screen-coins.jpg" alt="" className="block h-auto w-full" />
-          </div>
-
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <motion.div
-              className="flex h-24 w-24 items-center justify-center rounded-full border border-[#FF6B35]/35 bg-[radial-gradient(circle_at_35%_30%,#ffb08d,#FF6B35_42%,#9f2f0f_100%)] shadow-[0_0_55px_rgba(255,107,53,0.58)]"
-              animate={reduceMotion ? undefined : { rotateY: 360 }}
-              transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
-              style={{ transformStyle: "preserve-3d" }}
+          return (
+            <motion.button
+              key={realm.id}
+              type="button"
+              className={`fintech-galaxy__realm-node ${active ? "fintech-galaxy__realm-node--active" : ""}`}
+              style={realm.position}
+              onClick={() => setActiveRealm(realm)}
+              whileHover={reduceMotion ? undefined : { scale: 1.04 }}
+              whileTap={{ scale: 0.95 }}
+              aria-pressed={active}
+              data-realm-name={`${realm.label} Realm`}
             >
-              <Coins className="h-10 w-10 text-white drop-shadow-md" strokeWidth={1.6} />
-            </motion.div>
+              <Icon aria-hidden="true" />
+              <strong>{realm.label}</strong>
+            </motion.button>
+          );
+        })}
+      </motion.div>
+
+      <div className="fintech-galaxy__hint">Drag the coin • choose a financial realm</div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeRealm.id}
+          className="fintech-galaxy__realm-panel"
+          initial={{ opacity: 0, y: 18, scale: 0.96, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -12, scale: 0.97, filter: "blur(6px)" }}
+          transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <header>
+            <div>
+              <small>ACTIVE FINANCIAL REALM</small>
+              <h3>{activeRealm.label}</h3>
+            </div>
+            <strong>{activeRealm.value}</strong>
+          </header>
+          <p>{activeRealm.detail}</p>
+          <div className="mt-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#ff8a50]">
+            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            Powered by Nthoppa intelligence
           </div>
         </motion.div>
-      </div>
+      </AnimatePresence>
 
-      <motion.div
-        className="absolute left-5 top-7 hidden min-w-[178px] rounded-2xl border border-white/10 bg-white/[0.07] p-4 text-left shadow-2xl backdrop-blur-xl sm:block"
-        animate={reduceMotion ? undefined : { y: [0, -8, 0], rotate: [-1, 1, -1] }}
-        transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-white/45">
-          <TrendingUp className="h-4 w-4 text-[#FF6B35]" />
-          Savings growth
-        </div>
-        <div className="text-2xl font-black text-white">+18.4%</div>
-        <div className="mt-1 text-xs text-white/45">Goal progress this month</div>
-      </motion.div>
-
-      <motion.div
-        className="absolute right-5 top-8 hidden min-w-[170px] rounded-2xl border border-white/10 bg-white/[0.07] p-4 text-left shadow-2xl backdrop-blur-xl md:block"
-        animate={reduceMotion ? undefined : { y: [0, 9, 0], rotate: [1, -1, 1] }}
-        transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-white/45">
-          <ShieldCheck className="h-4 w-4 text-[#FF6B35]" />
-          Protected
-        </div>
-        <div className="text-sm font-bold text-white">Secure digital wallet</div>
-        <div className="mt-1 text-xs text-white/45">Built for everyday finance</div>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-7 right-6 hidden min-w-[180px] rounded-2xl border border-[#FF6B35]/25 bg-[#FF6B35]/10 p-4 text-left shadow-2xl backdrop-blur-xl sm:block"
-        animate={reduceMotion ? undefined : { y: [0, -7, 0] }}
-        transition={{ duration: 4.9, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#FF9B73]">
-          <Sparkles className="h-4 w-4" />
-          Nthoppa Coins
-        </div>
-        <div className="text-xl font-black text-white">2,480 rewards</div>
-        <div className="mt-1 text-xs text-white/45">Earn, redeem, move forward</div>
-      </motion.div>
-
-      <div className="absolute bottom-5 left-5 rounded-full border border-white/10 bg-black/35 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40 backdrop-blur-md">
-        Interactive finance ecosystem
+      <div className="pointer-events-none absolute left-5 top-5 z-20 flex items-center gap-2 rounded-full border border-white/10 bg-black/45 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45 backdrop-blur-xl">
+        <Coins className="h-3.5 w-3.5 text-[#ff7a38]" aria-hidden="true" />
+        Live ecosystem
       </div>
     </div>
   );
