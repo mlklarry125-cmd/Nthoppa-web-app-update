@@ -122,7 +122,7 @@ export function Offerings() {
                 )}
 
                 <div className="mb-6 flex items-center justify-between">
-                  <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-black/35 text-[#FF8750] shadow-[0_14px_35px_rgba(0,0,0,0.35)] transition duration-300 group-hover:-translate-y-1 group-hover:rotate-3 group-hover:border-[#FF6B35]/40 group-hover:shadow-[0_18px_45px_rgba(255,107,53,0.18)]">
+                  <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-black/[0.35] text-[#FF8750] shadow-[0_14px_35px_rgba(0,0,0,0.35)] transition duration-300 group-hover:-translate-y-1 group-hover:rotate-3 group-hover:border-[#FF6B35]/40 group-hover:shadow-[0_18px_45px_rgba(255,107,53,0.18)]">
                     <div className="absolute inset-2 rounded-xl border border-[#FF6B35]/10" aria-hidden="true" />
                     <Icon aria-hidden="true" className="relative h-7 w-7" strokeWidth={1.65} />
                   </div>
@@ -131,11 +131,11 @@ export function Offerings() {
 
                 <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#FF8750]">{offering.realm}</div>
                 <h3 className="mb-3 text-2xl font-black text-white">{offering.title}</h3>
-                <p className="mb-6 leading-relaxed text-white/48">{offering.description}</p>
+                <p className="mb-6 leading-relaxed text-white/[0.48]">{offering.description}</p>
 
                 <div className="mb-7 space-y-2.5">
                   {offering.features.map((feature) => (
-                    <div key={feature} className="flex items-center gap-2.5 text-sm text-white/45">
+                    <div key={feature} className="flex items-center gap-2.5 text-sm text-white/[0.45]">
                       <span className="h-1.5 w-1.5 rounded-full bg-[#FF6B35] shadow-[0_0_10px_rgba(255,107,53,0.9)]" aria-hidden="true" />
                       <span>{feature}</span>
                     </div>
